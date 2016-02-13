@@ -3,7 +3,7 @@ Meteor, mongo, bootstrap, materialize experiments
 
 Feautures:
   Add new links
-  Only registeren 
-  Search in title, description
-  Leave comments
   Voting system
+  Leave comments
+  Only registered users can post, vote 
+  Search in title, description
