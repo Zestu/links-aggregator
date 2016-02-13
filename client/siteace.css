@@ -1,0 +1,44 @@
+/* CSS declarations go here */
+.hidden_div {
+	display:none;
+}
+
+.pad-small {
+	padding: 20px;
+}
+
+body { 
+    padding-top: 60px; 
+}
+
+li {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.inline {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.padded {
+	margin-top: 15px;
+	float:left;
+}
+
+.padded_around {
+	margin: 10px;
+	margin-left: 0px;
+}
+
+.votebtns {
+	margin-right: 15px;
+}
+
+a.disabled {
+    pointer-events: none;
+}
+
+.paddedright {
+	margin-right: 10px;
+}

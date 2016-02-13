@@ -1,0 +1,142 @@
+<head>
+    <title>Linker aggregator</title>
+</head>
+
+<body>
+</body>
+<template name="ApplicationTemplate">
+    {{> yield "navbar"}}
+    <div class="container">
+        {{> yield "welcome_message"}} {{> yield "add_weburl"}} {{> yield "main"}}
+    </div>
+</template>
+<template name="navbar">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-brand">
+            {{> loginButtons}}
+        </div>
+    	<div class="navbar-form navbar-right">
+      		<input id="searchbox" type="text" class="form-control js-search-form paddedright" placeholder="Search...">
+    	</div>
+    </nav>
+</template>
+<template name="website_form">
+    {{#if currentUser}}
+    <div class="container pad-small">
+        <a class="btn btn-default js-toggle-website-form add-button" href="#">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </a>
+        <div id="website_form" class="hidden_div">
+            <form class="js-save-website-form">
+                <div class="form-group">
+                    <label for="url">Site address</label>
+                    <input type="text" class="form-control" id="url" placeholder="http://www.mysite.com">
+                </div>
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" placeholder="Mysite">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" class="form-control" id="description" placeholder="I found this site really useful for ...">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="welcomen">
+    <h3 class="text-warning">{{welcomenMessage}}</h3>
+    {{#if currentUser}}
+    	<p><a href="/recommendations"><u>Recommendations</u></a></p>
+    {{/if}}
+</template>
+<!-- template that displays several website items -->
+<template name="website_list">
+    <ol>
+        {{#each websites}} {{>website_item}} {{/each}}
+    </ol>
+</template>
+<template name="vote_buttons">
+    <div class="btn-group-vertical inline votebtns" role="group">
+        <a href="#" class="btn btn-default js-upvote {{#if isVoted voters}}disabled{{/if}}">
+            <span class="glyphicon glyphicon-arrow-up {{#if isVoted voters}}hidden{{/if}}" aria-hidden="true"></span>
+            <span id="votes_up_{{_id}}" class="label label-success">{{votesUp}}</span>
+        </a>
+        <a href="#" class="btn btn-default js-downvote {{#if isVoted voters}}disabled{{/if}}">
+            <span class="glyphicon glyphicon-arrow-down {{#if isVoted voters}}hidden{{/if}}" aria-hidden="true"></span>
+            <span id="votes_down_{{_id}}" class="label label-danger">{{votesDown}}</span>
+        </a>
+    </div>
+</template>
+<!-- template that displays individual website entries -->
+<template name="website_item">
+        {{#if currentUser}}
+        <div class="col-md-1 col-xs-3 padded">{{>vote_buttons}} </div>
+        {{/if}}
+        <div class="clearfix visible-xs-block"></div>
+        <div class="col-md-11  col-xs-9">
+            <li id="{{_id}}" class="inline">
+                <a href="{{url}}">{{title}}</a>
+                <p><small>Added {{formattedDate createdOn}}</small></p>
+                <p>{{description}}</p>
+                <a href="/comments/{{_id}}">Comments </a><span class="badge">{{comments.length}}</span>
+                <!-- you will be putting your up and down vote buttons in here! -->
+            </li>
+        </div>
+</template>
+<template name="comments">
+    <p>
+        <a href="/" type="button" class="btn btn-default padded_around"><span class="glyphicon glyphicon-menu-left" aria-hidden="false"></span>Back to list</a> {{#if currentUser}}
+        <button type="button" class="btn btn-success js-show-addcomment-form padded_around">Add comment</button>
+        {{> yield "website_add_comment"}} {{/if}}
+    </p>
+    {{>vote_buttons}}
+    <div class="page-header inline">
+        <h1><a href="{{url}}">{{title}}</a><small>&nbsp;&nbsp;&nbsp;{{formattedDate createdOn}} </small></h1>
+    </div>
+    <div class="well well-sm">{{description}}</div>
+    <div class="container">{{>comments_list}}</div>
+</template>
+<template name="comments_list">
+    <ol>
+        {{#each comments}} {{>comment_item}} {{/each}}
+    </ol>
+</template>
+<template name="comment_item">
+    <blockquote>
+        <p>{{text}}</p>
+        <footer>Commented by
+            <cite title="source">{{getUserName user}}</cite>
+        </footer>
+    </blockquote>
+</template>
+<template name="website_add_comment">
+    <div class="modal fade" id="website_add_comment">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="comment_form">Comment:</label>
+                        <textarea class="form-control" rows="3" id="comment_form" placeholder="Write a comment..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success js-add-comment">Leave a comment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<template name="recommendations_list">
+	<a href="/" type="button" class="btn btn-default padded_around"><span class="glyphicon glyphicon-menu-left" aria-hidden="false"></span>Back</a>
+    <ol>
+        {{#each recommendations}} {{>website_item}} {{/each}}
+    </ol>
+</template>
